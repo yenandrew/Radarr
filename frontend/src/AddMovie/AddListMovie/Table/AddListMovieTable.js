@@ -75,6 +75,7 @@ class AddListMovieTable extends Component {
       columns,
       sortKey,
       sortDirection,
+      isSmallScreen,
       scroller,
       onSortPress
     } = this.props;
@@ -84,6 +85,7 @@ class AddListMovieTable extends Component {
         className={styles.tableContainer}
         items={items}
         scrollIndex={this.state.scrollIndex}
+        isSmallScreen={isSmallScreen}
         scroller={scroller}
         rowHeight={38}
         overscanRowCount={2}
@@ -108,6 +110,7 @@ AddListMovieTable.propTypes = {
   sortKey: PropTypes.string,
   sortDirection: PropTypes.oneOf(sortDirections.all),
   jumpToCharacter: PropTypes.string,
+  isSmallScreen: PropTypes.bool.isRequired,
   scroller: PropTypes.instanceOf(Element).isRequired,
   onSortPress: PropTypes.func.isRequired
 };

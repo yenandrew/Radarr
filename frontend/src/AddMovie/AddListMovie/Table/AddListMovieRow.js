@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { icons } from 'Helpers/Props';
 import HeartRating from 'Components/HeartRating';
+import IconButton from 'Components/Link/IconButton';
 import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import MovieStatusCell from './MovieStatusCell';
@@ -168,6 +170,20 @@ class AddListMovieRow extends Component {
                   className={styles[name]}
                 >
                   {certification}
+                </VirtualTableRowCell>
+              );
+            }
+
+            if (name === 'actions') {
+              return (
+                <VirtualTableRowCell
+                  key={name}
+                  className={styles[name]}
+                >
+                  <IconButton
+                    name={icons.ADD}
+                    title="Add Movie"
+                  />
                 </VirtualTableRowCell>
               );
             }
