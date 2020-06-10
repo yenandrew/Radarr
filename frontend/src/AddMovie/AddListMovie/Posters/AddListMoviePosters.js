@@ -190,7 +190,8 @@ class AddListMoviePosters extends Component {
       showTitle
     } = posterOptions;
 
-    const movie = items[rowIndex * columnCount + columnIndex];
+    const movieIdx = rowIndex * columnCount + columnIndex;
+    const movie = items[movieIdx];
 
     if (!movie) {
       return null;
@@ -198,6 +199,7 @@ class AddListMoviePosters extends Component {
 
     return (
       <div
+        className={styles.container}
         key={key}
         style={style}
       >
