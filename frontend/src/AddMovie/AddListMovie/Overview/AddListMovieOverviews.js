@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Grid, WindowScroller } from 'react-virtualized';
 import getIndexOfFirstCharacter from 'Utilities/Array/getIndexOfFirstCharacter';
-import hasDifferentItemsOrOrder from 'Utilities/Object/hasDifferentItems';
+import hasDifferentItemsOrOrder from 'Utilities/Object/hasDifferentItemsOrOrder';
 import dimensions from 'Styles/Variables/dimensions';
 import Measure from 'Components/Measure';
 import AddListMovieItemConnector from 'AddMovie/AddListMovie/AddListMovieItemConnector';
@@ -81,7 +81,7 @@ class AddListMovieOverviews extends Component {
     if (this._grid &&
         (prevState.width !== width ||
             prevState.rowHeight !== rowHeight ||
-            hasDifferentItemsOrOrder(prevProps.items, items))) {
+            hasDifferentItemsOrOrder(prevProps.items, items, 'tmdbId'))) {
       // recomputeGridSize also forces Grid to discard its cache of rendered cells
       this._grid.recomputeGridSize();
     }
