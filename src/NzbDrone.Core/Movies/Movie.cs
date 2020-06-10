@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Movies
             Genres = new List<string>();
             Tags = new HashSet<int>();
             AlternativeTitles = new List<AlternativeTitle>();
+            Recommendations = new List<int>();
         }
 
         public int TmdbId { get; set; }
