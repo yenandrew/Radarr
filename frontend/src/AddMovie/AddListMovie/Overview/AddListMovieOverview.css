@@ -33,17 +33,10 @@ $hoverScale: 1.05;
   }
 }
 
-.ended {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 1;
-  width: 0;
-  height: 0;
-  border-width: 0 25px 25px 0;
-  border-style: solid;
-  border-color: transparent $dangerColor transparent transparent;
-  color: $white;
+.exclusionIcon {
+  margin-left: 10px;
+  color: $dangerColor;
+  pointer-events: all;
 }
 
 .info {
@@ -56,8 +49,6 @@ $hoverScale: 1.05;
 
 .titleRow {
   display: flex;
-  justify-content: space-between;
-  flex: 0 0 auto;
   margin-bottom: 10px;
   font-weight: 300;
   font-size: 30px;

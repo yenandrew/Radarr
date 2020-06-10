@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import TextTruncate from 'react-text-truncate';
+import { icons } from 'Helpers/Props';
+import Icon from 'Components/Icon';
 import dimensions from 'Styles/Variables/dimensions';
 import fonts from 'Styles/Variables/fonts';
 import MoviePoster from 'Movie/MoviePoster';
@@ -63,7 +65,8 @@ class AddListMovieOverview extends Component {
       posterHeight,
       rowHeight,
       isSmallScreen,
-      isExistingMovie
+      isExistingMovie,
+      isExclusionMovie
     } = this.props;
 
     const {
@@ -103,6 +106,15 @@ class AddListMovieOverview extends Component {
           <div className={styles.info} style={{ maxHeight: contentHeight }}>
             <div className={styles.titleRow}>
               {title} ({year})
+              {
+                isExclusionMovie &&
+                  <Icon
+                    className={styles.exclusionIcon}
+                    name={icons.DANGER}
+                    size={36}
+                    title="Movie is on Net Import Exclusion List"
+                  />
+              }
             </div>
 
             <div className={styles.details}>

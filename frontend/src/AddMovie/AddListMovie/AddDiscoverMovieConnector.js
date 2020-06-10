@@ -6,6 +6,7 @@ import createAddMovieClientSideCollectionItemsSelector from 'Store/Selectors/cre
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
 import { fetchDiscoverMovies, clearAddMovie, setListMovieSort, setListMovieFilter, setListMovieView, setListMovieTableOption } from 'Store/Actions/addMovieActions';
+import { fetchNetImportExclusions } from 'Store/Actions/Settings/netImportExclusions';
 import scrollPositions from 'Store/scrollPositions';
 import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
 import withScrollPosition from 'Components/withScrollPosition';
@@ -31,6 +32,10 @@ function createMapDispatchToProps(dispatch, props) {
   return {
     dispatchFetchRootFolders() {
       dispatch(fetchRootFolders());
+    },
+
+    dispatchFetchNetImportExclusions() {
+      dispatch(fetchNetImportExclusions());
     },
 
     dispatchClearListMovie() {
@@ -67,6 +72,7 @@ class AddDiscoverMovieConnector extends Component {
   componentDidMount() {
     registerPagePopulator(this.repopulate);
     this.props.dispatchFetchRootFolders();
+    this.props.dispatchFetchNetImportExclusions();
     this.props.dispatchFetchListMovies();
   }
 
@@ -104,6 +110,7 @@ class AddDiscoverMovieConnector extends Component {
 AddDiscoverMovieConnector.propTypes = {
   isSmallScreen: PropTypes.bool.isRequired,
   view: PropTypes.string.isRequired,
+  dispatchFetchNetImportExclusions: PropTypes.func.isRequired,
   dispatchFetchRootFolders: PropTypes.func.isRequired,
   dispatchFetchListMovies: PropTypes.func.isRequired,
   dispatchClearListMovie: PropTypes.func.isRequired,

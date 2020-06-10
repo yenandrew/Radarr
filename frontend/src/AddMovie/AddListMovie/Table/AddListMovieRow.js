@@ -5,7 +5,7 @@ import HeartRating from 'Components/HeartRating';
 import IconButton from 'Components/Link/IconButton';
 import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
-import MovieStatusCell from './MovieStatusCell';
+import ListMovieStatusCell from './ListMovieStatusCell';
 import Link from 'Components/Link/Link';
 import AddNewMovieModal from 'AddMovie/AddNewMovie/AddNewMovieModal';
 import styles from './AddListMovieRow.css';
@@ -54,7 +54,8 @@ class AddListMovieRow extends Component {
       ratings,
       certification,
       columns,
-      isExistingMovie
+      isExistingMovie,
+      isExclusionMovie
     } = this.props;
 
     const {
@@ -78,10 +79,11 @@ class AddListMovieRow extends Component {
 
             if (name === 'status') {
               return (
-                <MovieStatusCell
+                <ListMovieStatusCell
                   key={name}
                   className={styles[name]}
                   status={status}
+                  isExclusion={isExclusionMovie}
                   component={VirtualTableRowCell}
                 />
               );
@@ -181,8 +183,8 @@ class AddListMovieRow extends Component {
                   className={styles[name]}
                 >
                   <IconButton
-                    name={icons.ADD}
-                    title="Add Movie"
+                    name={icons.REMOVE}
+                    title="Exclude Movie"
                   />
                 </VirtualTableRowCell>
               );
@@ -223,7 +225,8 @@ AddListMovieRow.propTypes = {
   ratings: PropTypes.object.isRequired,
   certification: PropTypes.string,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
-  isExistingMovie: PropTypes.bool.isRequired
+  isExistingMovie: PropTypes.bool.isRequired,
+  isExclusionMovie: PropTypes.bool.isRequired
 };
 
 AddListMovieRow.defaultProps = {

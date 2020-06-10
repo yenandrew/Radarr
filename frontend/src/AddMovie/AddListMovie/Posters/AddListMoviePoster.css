@@ -50,10 +50,11 @@ $hoverScale: 1.05;
   font-size: $smallFontSize;
 }
 
-.ended {
+.excluded {
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 3;
   width: 0;
   height: 0;
   border-width: 0 25px 25px 0;

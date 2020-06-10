@@ -52,13 +52,13 @@ class AddListMoviePoster extends Component {
       year,
       overview,
       folder,
-      status,
       titleSlug,
       images,
       posterWidth,
       posterHeight,
       showTitle,
-      isExistingMovie
+      isExistingMovie,
+      isExclusionMovie
     } = this.props;
 
     const {
@@ -77,10 +77,10 @@ class AddListMoviePoster extends Component {
       <div className={styles.content}>
         <div className={styles.posterContainer}>
           {
-            status === 'ended' &&
+            isExclusionMovie &&
               <div
-                className={styles.ended}
-                title="Ended"
+                className={styles.excluded}
+                title="Exluded"
               />
           }
 
