@@ -3,11 +3,13 @@ import React, { Component } from 'react';
 import TextTruncate from 'react-text-truncate';
 import { icons } from 'Helpers/Props';
 import Icon from 'Components/Icon';
+import IconButton from 'Components/Link/IconButton';
 import dimensions from 'Styles/Variables/dimensions';
 import fonts from 'Styles/Variables/fonts';
 import MoviePoster from 'Movie/MoviePoster';
 import Link from 'Components/Link/Link';
 import AddNewMovieModal from 'AddMovie/AddNewMovie/AddNewMovieModal';
+import ExcludeMovieModal from 'AddMovie/AddListMovie/Exclusion/ExcludeMovieModal';
 import styles from './AddListMovieOverview.css';
 
 const columnPadding = parseInt(dimensions.movieIndexColumnPadding);
@@ -34,7 +36,8 @@ class AddListMovieOverview extends Component {
     super(props, context);
 
     this.state = {
-      isNewAddMovieModalOpen: false
+      isNewAddMovieModalOpen: false,
+      isExcludeMovieModalOpen: false
     };
   }
 
@@ -47,6 +50,14 @@ class AddListMovieOverview extends Component {
 
   onAddMovieModalClose = () => {
     this.setState({ isNewAddMovieModalOpen: false });
+  }
+
+  onExcludeMoviePress = () => {
+    this.setState({ isExcludeMovieModalOpen: true });
+  }
+
+  onExcludeMovieModalClose = () => {
+    this.setState({ isExcludeMovieModalOpen: false });
   }
 
   //
@@ -70,7 +81,8 @@ class AddListMovieOverview extends Component {
     } = this.props;
 
     const {
-      isNewAddMovieModalOpen
+      isNewAddMovieModalOpen,
+      isExcludeMovieModalOpen
     } = this.state;
 
     const elementStyle = {
@@ -85,10 +97,7 @@ class AddListMovieOverview extends Component {
 
     return (
       <div className={styles.container}>
-        <Link
-          className={styles.content}
-          {...linkProps}
-        >
+        <div className={styles.content}>
           <div className={styles.poster}>
             <div className={styles.posterContainer}>
 
@@ -105,16 +114,30 @@ class AddListMovieOverview extends Component {
 
           <div className={styles.info} style={{ maxHeight: contentHeight }}>
             <div className={styles.titleRow}>
-              {title} ({year})
-              {
-                isExclusionMovie &&
-                  <Icon
-                    className={styles.exclusionIcon}
-                    name={icons.DANGER}
-                    size={36}
-                    title="Movie is on Net Import Exclusion List"
-                  />
-              }
+              <Link
+                className={styles.title}
+                {...linkProps}
+              >
+                {title}({year})
+                {
+                  isExclusionMovie &&
+                    <Icon
+                      className={styles.exclusionIcon}
+                      name={icons.DANGER}
+                      size={36}
+                      title='Movie is on Net Import Exclusion List'
+                    />
+                }
+              </Link>
+
+              <div className={styles.actions}>
+                <IconButton
+                  name={icons.REMOVE}
+                  title={isExclusionMovie ? 'Movie already Excluded' : 'Exclude Movie'}
+                  onPress={this.onExcludeMoviePress}
+                  isDisabled={isExclusionMovie}
+                />
+              </div>
             </div>
 
             <div className={styles.details}>
@@ -125,7 +148,7 @@ class AddListMovieOverview extends Component {
 
             </div>
           </div>
-        </Link>
+        </div>
 
         <AddNewMovieModal
           isOpen={isNewAddMovieModalOpen && !isExistingMovie}
@@ -136,6 +159,14 @@ class AddListMovieOverview extends Component {
           folder={folder}
           images={images}
           onModalClose={this.onAddMovieModalClose}
+        />
+
+        <ExcludeMovieModal
+          isOpen={isExcludeMovieModalOpen}
+          tmdbId={tmdbId}
+          title={title}
+          year={year}
+          onModalClose={this.onExcludeMovieModalClose}
         />
       </div>
     );

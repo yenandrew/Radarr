@@ -8,6 +8,7 @@ import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellCo
 import ListMovieStatusCell from './ListMovieStatusCell';
 import Link from 'Components/Link/Link';
 import AddNewMovieModal from 'AddMovie/AddNewMovie/AddNewMovieModal';
+import ExcludeMovieModal from 'AddMovie/AddListMovie/Exclusion/ExcludeMovieModal';
 import styles from './AddListMovieRow.css';
 
 class AddListMovieRow extends Component {
@@ -19,19 +20,28 @@ class AddListMovieRow extends Component {
     super(props, context);
 
     this.state = {
-      isNewAddMovieModalOpen: false
+      isNewAddMovieModalOpen: false,
+      isExcludeMovieModalOpen: false
     };
   }
 
   //
   // Listeners
 
-  onPress = () => {
+  onAddMoviePress = () => {
     this.setState({ isNewAddMovieModalOpen: true });
   }
 
   onAddMovieModalClose = () => {
     this.setState({ isNewAddMovieModalOpen: false });
+  }
+
+  onExcludeMoviePress = () => {
+    this.setState({ isExcludeMovieModalOpen: true });
+  }
+
+  onExcludeMovieModalClose = () => {
+    this.setState({ isExcludeMovieModalOpen: false });
   }
 
   //
@@ -59,10 +69,11 @@ class AddListMovieRow extends Component {
     } = this.props;
 
     const {
-      isNewAddMovieModalOpen
+      isNewAddMovieModalOpen,
+      isExcludeMovieModalOpen
     } = this.state;
 
-    const linkProps = isExistingMovie ? { to: `/movie/${titleSlug}` } : { onPress: this.onPress };
+    const linkProps = isExistingMovie ? { to: `/movie/${titleSlug}` } : { onPress: this.onAddMoviePress };
 
     return (
       <>
@@ -184,7 +195,9 @@ class AddListMovieRow extends Component {
                 >
                   <IconButton
                     name={icons.REMOVE}
-                    title="Exclude Movie"
+                    title={isExclusionMovie ? 'Movie already Excluded' : 'Exclude Movie'}
+                    onPress={this.onExcludeMoviePress}
+                    isDisabled={isExclusionMovie}
                   />
                 </VirtualTableRowCell>
               );
@@ -203,6 +216,14 @@ class AddListMovieRow extends Component {
           folder={folder}
           images={images}
           onModalClose={this.onAddMovieModalClose}
+        />
+
+        <ExcludeMovieModal
+          isOpen={isExcludeMovieModalOpen}
+          tmdbId={tmdbId}
+          title={title}
+          year={year}
+          onModalClose={this.onExcludeMovieModalClose}
         />
       </>
     );

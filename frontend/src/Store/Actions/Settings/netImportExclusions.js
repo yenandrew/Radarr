@@ -1,9 +1,12 @@
 import { createAction } from 'redux-actions';
+import { batchActions } from 'redux-batched-actions';
 import { createThunk } from 'Store/thunks';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import createSetSettingValueReducer from 'Store/Actions/Creators/Reducers/createSetSettingValueReducer';
 import createFetchHandler from 'Store/Actions/Creators/createFetchHandler';
 import createSaveProviderHandler from 'Store/Actions/Creators/createSaveProviderHandler';
 import createRemoveItemHandler from 'Store/Actions/Creators/createRemoveItemHandler';
+import { set, updateItem } from './../baseActions';
 
 //
 // Variables
@@ -14,6 +17,7 @@ const section = 'settings.netImportExclusions';
 // Actions Types
 
 export const FETCH_NET_IMPORT_EXCLUSIONS = 'settings/netImportExclusions/fetchNetImportExclusions';
+export const ADD_NET_IMPORT_EXCLUSION = 'settings/netImportExclusions/addNetImportExclusion';
 export const SAVE_NET_IMPORT_EXCLUSION = 'settings/netImportExclusions/saveNetImportExclusion';
 export const DELETE_NET_IMPORT_EXCLUSION = 'settings/netImportExclusions/deleteNetImportExclusion';
 export const SET_NET_IMPORT_EXCLUSION_VALUE = 'settings/netImportExclusions/setNetImportExclusionValue';
@@ -22,6 +26,7 @@ export const SET_NET_IMPORT_EXCLUSION_VALUE = 'settings/netImportExclusions/setN
 // Action Creators
 
 export const fetchNetImportExclusions = createThunk(FETCH_NET_IMPORT_EXCLUSIONS);
+export const addNetImportExclusion = createThunk(ADD_NET_IMPORT_EXCLUSION);
 export const saveNetImportExclusion = createThunk(SAVE_NET_IMPORT_EXCLUSION);
 export const deleteNetImportExclusion = createThunk(DELETE_NET_IMPORT_EXCLUSION);
 
@@ -55,6 +60,42 @@ export default {
 
   actionHandlers: {
     [FETCH_NET_IMPORT_EXCLUSIONS]: createFetchHandler(section, '/exclusions'),
+
+    [ADD_NET_IMPORT_EXCLUSION]: function(getState, payload, dispatch) {
+      const tmdbId = payload.tmdbId;
+      const movieTitle = payload.movieTitle;
+      const movieYear = payload.movieYear;
+
+      const promise = createAjaxRequest({
+        url: '/exclusions',
+        method: 'POST',
+        data: JSON.stringify({ tmdbId, movieTitle, movieYear })
+      }).request;
+
+      promise.done((data) => {
+        dispatch(batchActions([
+          updateItem({
+            section,
+            ...data
+          }),
+
+          set({
+            section,
+            isSaving: false,
+            saveError: null
+          })
+        ]));
+      });
+
+      promise.fail((xhr) => {
+        dispatch(set({
+          section,
+          isSaving: false,
+          saveError: xhr
+        }));
+      });
+    },
+
     [SAVE_NET_IMPORT_EXCLUSION]: createSaveProviderHandler(section, '/exclusions'),
     [DELETE_NET_IMPORT_EXCLUSION]: createRemoveItemHandler(section, '/exclusions')
   },
