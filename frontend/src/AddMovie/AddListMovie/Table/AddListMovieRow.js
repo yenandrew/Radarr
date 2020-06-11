@@ -9,6 +9,7 @@ import ListMovieStatusCell from './ListMovieStatusCell';
 import Link from 'Components/Link/Link';
 import AddNewMovieModal from 'AddMovie/AddNewMovie/AddNewMovieModal';
 import ExcludeMovieModal from 'AddMovie/AddListMovie/Exclusion/ExcludeMovieModal';
+import VirtualTableSelectCell from 'Components/Table/Cells/VirtualTableSelectCell';
 import styles from './AddListMovieRow.css';
 
 class AddListMovieRow extends Component {
@@ -65,7 +66,9 @@ class AddListMovieRow extends Component {
       certification,
       columns,
       isExistingMovie,
-      isExclusionMovie
+      isExclusionMovie,
+      isSelected,
+      onSelectedChange
     } = this.props;
 
     const {
@@ -77,6 +80,15 @@ class AddListMovieRow extends Component {
 
     return (
       <>
+        <VirtualTableSelectCell
+          inputClassName={styles.checkInput}
+          id={tmdbId}
+          key={name}
+          isSelected={isSelected}
+          isDisabled={false}
+          onSelectedChange={onSelectedChange}
+        />
+
         {
           columns.map((column) => {
             const {
@@ -247,7 +259,9 @@ AddListMovieRow.propTypes = {
   certification: PropTypes.string,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   isExistingMovie: PropTypes.bool.isRequired,
-  isExclusionMovie: PropTypes.bool.isRequired
+  isExclusionMovie: PropTypes.bool.isRequired,
+  isSelected: PropTypes.bool,
+  onSelectedChange: PropTypes.func.isRequired
 };
 
 AddListMovieRow.defaultProps = {

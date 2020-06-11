@@ -6,6 +6,7 @@ import Icon from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
 import dimensions from 'Styles/Variables/dimensions';
 import fonts from 'Styles/Variables/fonts';
+import CheckInput from 'Components/Form/CheckInput';
 import MoviePoster from 'Movie/MoviePoster';
 import Link from 'Components/Link/Link';
 import AddNewMovieModal from 'AddMovie/AddNewMovie/AddNewMovieModal';
@@ -60,6 +61,15 @@ class AddListMovieOverview extends Component {
     this.setState({ isExcludeMovieModalOpen: false });
   }
 
+  onChange = ({ value, shiftKey }) => {
+    const {
+      tmdbId,
+      onSelectedChange
+    } = this.props;
+
+    onSelectedChange({ id: tmdbId, value, shiftKey });
+  }
+
   //
   // Render
 
@@ -77,7 +87,8 @@ class AddListMovieOverview extends Component {
       rowHeight,
       isSmallScreen,
       isExistingMovie,
-      isExclusionMovie
+      isExclusionMovie,
+      isSelected
     } = this.props;
 
     const {
@@ -100,6 +111,14 @@ class AddListMovieOverview extends Component {
         <div className={styles.content}>
           <div className={styles.poster}>
             <div className={styles.posterContainer}>
+              <div className={styles.editorSelect}>
+                <CheckInput
+                  className={styles.checkInput}
+                  name={tmdbId.toString()}
+                  value={isSelected}
+                  onChange={this.onChange}
+                />
+              </div>
 
               <MoviePoster
                 className={styles.poster}
@@ -193,7 +212,9 @@ AddListMovieOverview.propTypes = {
   timeFormat: PropTypes.string.isRequired,
   isSmallScreen: PropTypes.bool.isRequired,
   isExistingMovie: PropTypes.bool.isRequired,
-  isExclusionMovie: PropTypes.bool.isRequired
+  isExclusionMovie: PropTypes.bool.isRequired,
+  isSelected: PropTypes.bool,
+  onSelectedChange: PropTypes.func.isRequired
 };
 
 export default AddListMovieOverview;

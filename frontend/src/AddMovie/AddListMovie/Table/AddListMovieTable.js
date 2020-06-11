@@ -46,7 +46,9 @@ class AddListMovieTable extends Component {
   rowRenderer = ({ key, rowIndex, style }) => {
     const {
       items,
-      columns
+      columns,
+      selectedState,
+      onSelectedChange
     } = this.props;
 
     const movie = items[rowIndex];
@@ -61,6 +63,8 @@ class AddListMovieTable extends Component {
           component={AddListMovieRowConnector}
           columns={columns}
           movieId={movie.tmdbId}
+          isSelected={selectedState[movie.tmdbId]}
+          onSelectedChange={onSelectedChange}
         />
       </VirtualTableRow>
     );
@@ -76,8 +80,12 @@ class AddListMovieTable extends Component {
       sortKey,
       sortDirection,
       isSmallScreen,
+      onSortPress,
       scroller,
-      onSortPress
+      allSelected,
+      allUnselected,
+      onSelectAllChange,
+      selectedState
     } = this.props;
 
     return (
@@ -96,8 +104,12 @@ class AddListMovieTable extends Component {
             sortKey={sortKey}
             sortDirection={sortDirection}
             onSortPress={onSortPress}
+            allSelected={allSelected}
+            allUnselected={allUnselected}
+            onSelectAllChange={onSelectAllChange}
           />
         }
+        selectedState={selectedState}
         columns={columns}
       />
     );
@@ -112,7 +124,12 @@ AddListMovieTable.propTypes = {
   jumpToCharacter: PropTypes.string,
   isSmallScreen: PropTypes.bool.isRequired,
   scroller: PropTypes.instanceOf(Element).isRequired,
-  onSortPress: PropTypes.func.isRequired
+  onSortPress: PropTypes.func.isRequired,
+  allSelected: PropTypes.bool.isRequired,
+  allUnselected: PropTypes.bool.isRequired,
+  selectedState: PropTypes.object.isRequired,
+  onSelectedChange: PropTypes.func.isRequired,
+  onSelectAllChange: PropTypes.func.isRequired
 };
 
 export default AddListMovieTable;

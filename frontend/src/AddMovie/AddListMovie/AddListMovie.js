@@ -1,7 +1,10 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import hasDifferentItemsOrOrder from 'Utilities/Object/hasDifferentItems';
+import hasDifferentItemsOrOrder from 'Utilities/Object/hasDifferentItemsOrOrder';
+import getSelectedIds from 'Utilities/Table/getSelectedIds';
+import selectAll from 'Utilities/Table/selectAll';
+import toggleSelected from 'Utilities/Table/toggleSelected';
 import { align, icons, sortDirections } from 'Helpers/Props';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
@@ -50,12 +53,16 @@ class AddListMovie extends Component {
       isOverviewOptionsModalOpen: false,
       isConfirmSearchModalOpen: false,
       searchType: null,
-      lastToggled: null
+      allSelected: false,
+      allUnselected: false,
+      lastToggled: null,
+      selectedState: {}
     };
   }
 
   componentDidMount() {
     this.setJumpBarItems();
+    this.setSelectedState();
   }
 
   componentDidUpdate(prevProps) {
@@ -70,6 +77,7 @@ class AddListMovie extends Component {
         hasDifferentItemsOrOrder(prevProps.items, items)
     ) {
       this.setJumpBarItems();
+      this.setSelectedState();
     }
 
     if (this.state.jumpToCharacter != null) {
@@ -82,6 +90,48 @@ class AddListMovie extends Component {
 
   setScrollerRef = (ref) => {
     this.setState({ scroller: ref });
+  }
+
+  getSelectedIds = () => {
+    if (this.state.allUnselected) {
+      return [];
+    }
+    return getSelectedIds(this.state.selectedState);
+  }
+
+  setSelectedState() {
+    const {
+      items
+    } = this.props;
+
+    const {
+      selectedState
+    } = this.state;
+
+    const newSelectedState = {};
+
+    items.forEach((movie) => {
+      const isItemSelected = selectedState[movie.tmdbId];
+
+      if (isItemSelected) {
+        newSelectedState[movie.tmdbId] = isItemSelected;
+      } else {
+        newSelectedState[movie.tmdbId] = false;
+      }
+    });
+
+    const selectedCount = getSelectedIds(newSelectedState).length;
+    const newStateCount = Object.keys(newSelectedState).length;
+    let isAllSelected = false;
+    let isAllUnselected = false;
+
+    if (selectedCount === 0) {
+      isAllUnselected = true;
+    } else if (selectedCount === newStateCount) {
+      isAllSelected = true;
+    }
+
+    this.setState({ selectedState: newSelectedState, allSelected: isAllSelected, allUnselected: isAllUnselected });
   }
 
   setJumpBarItems() {
@@ -151,6 +201,20 @@ class AddListMovie extends Component {
     this.setState({ jumpToCharacter });
   }
 
+  onSelectAllChange = ({ value }) => {
+    this.setState(selectAll(this.state.selectedState, value));
+  }
+
+  onSelectAllPress = () => {
+    this.onSelectAllChange({ value: !this.state.allSelected });
+  }
+
+  onSelectedChange = ({ id, value, shiftKey = false }) => {
+    this.setState((state) => {
+      return toggleSelected(state, this.props.items, id, value, shiftKey, 'tmdbId');
+    });
+  }
+
   //
   // Render
 
@@ -180,8 +244,13 @@ class AddListMovie extends Component {
       jumpBarItems,
       jumpToCharacter,
       isPosterOptionsModalOpen,
-      isOverviewOptionsModalOpen
+      isOverviewOptionsModalOpen,
+      selectedState,
+      allSelected,
+      allUnselected
     } = this.state;
+
+    // const selectedMovieIds = this.getSelectedIds();
 
     const ViewComponent = getViewComponent(view);
     const isLoaded = !!(!error && isPopulated && items.length && scroller);
@@ -190,6 +259,15 @@ class AddListMovie extends Component {
     return (
       <PageContent>
         <PageToolbar>
+          <PageToolbarSection>
+            <PageToolbarButton
+              label={allSelected ? 'Unselect All' : 'Select All'}
+              iconName={icons.CHECK_SQUARE}
+              isDisabled={hasNoMovie}
+              onPress={this.onSelectAllPress}
+            />
+          </PageToolbarSection>
+
           <PageToolbarSection
             alignContent={align.RIGHT}
             collapseButtons={false}
@@ -285,6 +363,11 @@ class AddListMovie extends Component {
                     sortKey={sortKey}
                     sortDirection={sortDirection}
                     jumpToCharacter={jumpToCharacter}
+                    allSelected={allSelected}
+                    allUnselected={allUnselected}
+                    onSelectedChange={this.onSelectedChange}
+                    onSelectAllChange={this.onSelectAllChange}
+                    selectedState={selectedState}
                     {...otherProps}
                   />
                 </div>

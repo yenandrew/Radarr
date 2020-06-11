@@ -3,15 +3,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import createAddListMovieSelector from 'Store/Selectors/createAddListMovieSelector';
-import createMovieQualityProfileSelector from 'Store/Selectors/createMovieQualityProfileSelector';
 
 function createMapStateToProps() {
   return createSelector(
     createAddListMovieSelector(),
-    createMovieQualityProfileSelector(),
     (
-      movie,
-      qualityProfile
+      movie
     ) => {
 
       // If a movie is deleted this selector may fire before the parent
@@ -24,15 +21,11 @@ function createMapStateToProps() {
       }
 
       return {
-        ...movie,
-        qualityProfile
+        ...movie
       };
     }
   );
 }
-
-const mapDispatchToProps = {
-};
 
 class AddListMovieItemConnector extends Component {
 
@@ -64,4 +57,4 @@ AddListMovieItemConnector.propTypes = {
   component: PropTypes.elementType.isRequired
 };
 
-export default connect(createMapStateToProps, mapDispatchToProps)(AddListMovieItemConnector);
+export default connect(createMapStateToProps)(AddListMovieItemConnector);

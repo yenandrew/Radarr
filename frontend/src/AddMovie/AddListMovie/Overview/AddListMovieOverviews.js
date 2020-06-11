@@ -133,7 +133,9 @@ class AddListMovieOverviews extends Component {
       shortDateFormat,
       longDateFormat,
       timeFormat,
-      isSmallScreen
+      isSmallScreen,
+      selectedState,
+      onSelectedChange
     } = this.props;
 
     const {
@@ -155,7 +157,7 @@ class AddListMovieOverviews extends Component {
         style={style}
       >
         <AddListMovieItemConnector
-          key={movie.id}
+          key={movie.tmdbId}
           component={AddListMovieOverviewConnector}
           sortKey={sortKey}
           posterWidth={posterWidth}
@@ -168,6 +170,8 @@ class AddListMovieOverviews extends Component {
           timeFormat={timeFormat}
           isSmallScreen={isSmallScreen}
           movieId={movie.tmdbId}
+          isSelected={selectedState[movie.tmdbId]}
+          onSelectedChange={onSelectedChange}
         />
       </div>
     );
@@ -187,7 +191,8 @@ class AddListMovieOverviews extends Component {
     const {
       isSmallScreen,
       scroller,
-      items
+      items,
+      selectedState
     } = this.props;
 
     const {
@@ -224,6 +229,7 @@ class AddListMovieOverviews extends Component {
                   scrollTop={scrollTop}
                   overscanRowCount={2}
                   cellRenderer={this.cellRenderer}
+                  selectedState={selectedState}
                   scrollToAlignment={'start'}
                   isScrollingOptout={true}
                 />
@@ -247,7 +253,9 @@ AddListMovieOverviews.propTypes = {
   shortDateFormat: PropTypes.string.isRequired,
   longDateFormat: PropTypes.string.isRequired,
   isSmallScreen: PropTypes.bool.isRequired,
-  timeFormat: PropTypes.string.isRequired
+  timeFormat: PropTypes.string.isRequired,
+  selectedState: PropTypes.object.isRequired,
+  onSelectedChange: PropTypes.func.isRequired
 };
 
 export default AddListMovieOverviews;

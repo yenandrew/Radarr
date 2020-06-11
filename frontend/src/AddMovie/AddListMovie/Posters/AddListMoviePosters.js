@@ -36,9 +36,7 @@ function calculateColumnWidth(width, posterSize, isSmallScreen) {
 function calculateRowHeight(posterHeight, sortKey, isSmallScreen, posterOptions) {
   const {
     detailedProgressBar,
-    showTitle,
-    showMonitored,
-    showQualityProfile
+    showTitle
   } = posterOptions;
 
   const nextAiringHeight = 19;
@@ -51,14 +49,6 @@ function calculateRowHeight(posterHeight, sortKey, isSmallScreen, posterOptions)
   ];
 
   if (showTitle) {
-    heights.push(19);
-  }
-
-  if (showMonitored) {
-    heights.push(19);
-  }
-
-  if (showQualityProfile) {
     heights.push(19);
   }
 
@@ -177,7 +167,9 @@ class AddListMoviePosters extends Component {
       posterOptions,
       showRelativeDates,
       shortDateFormat,
-      timeFormat
+      timeFormat,
+      selectedState,
+      onSelectedChange
     } = this.props;
 
     const {
@@ -204,7 +196,7 @@ class AddListMoviePosters extends Component {
         style={style}
       >
         <AddListMovieItemConnector
-          key={movie.id}
+          key={movie.tmdbId}
           component={AddListMoviePosterConnector}
           sortKey={sortKey}
           posterWidth={posterWidth}
@@ -214,6 +206,8 @@ class AddListMoviePosters extends Component {
           shortDateFormat={shortDateFormat}
           timeFormat={timeFormat}
           movieId={movie.tmdbId}
+          isSelected={selectedState[movie.tmdbId]}
+          onSelectedChange={onSelectedChange}
         />
       </div>
     );
@@ -233,7 +227,8 @@ class AddListMoviePosters extends Component {
     const {
       isSmallScreen,
       scroller,
-      items
+      items,
+      selectedState
     } = this.props;
 
     const {
@@ -274,6 +269,7 @@ class AddListMoviePosters extends Component {
                   scrollTop={scrollTop}
                   overscanRowCount={2}
                   cellRenderer={this.cellRenderer}
+                  selectedState={selectedState}
                   scrollToAlignment={'start'}
                   isScrollingOptOut={true}
                 />
@@ -296,7 +292,9 @@ AddListMoviePosters.propTypes = {
   showRelativeDates: PropTypes.bool.isRequired,
   shortDateFormat: PropTypes.string.isRequired,
   isSmallScreen: PropTypes.bool.isRequired,
-  timeFormat: PropTypes.string.isRequired
+  timeFormat: PropTypes.string.isRequired,
+  selectedState: PropTypes.object.isRequired,
+  onSelectedChange: PropTypes.func.isRequired
 };
 
 export default AddListMoviePosters;

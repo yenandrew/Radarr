@@ -54,7 +54,6 @@ $hoverScale: 1.05;
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 3;
   width: 0;
   height: 0;
   border-width: 0 25px 25px 0;
@@ -74,6 +73,13 @@ $hoverScale: 1.05;
   font-size: $smallFontSize;
   opacity: 0;
   transition: opacity 0;
+}
+
+.editorSelect {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
 }
 
 .action {

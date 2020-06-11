@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { icons } from 'Helpers/Props';
 import IconButton from 'Components/Link/IconButton';
+import CheckInput from 'Components/Form/CheckInput';
 import Label from 'Components/Label';
 import Link from 'Components/Link/Link';
 import MoviePoster from 'Movie/MoviePoster';
@@ -55,6 +56,15 @@ class AddListMoviePoster extends Component {
     }
   }
 
+  onChange = ({ value, shiftKey }) => {
+    const {
+      tmdbId,
+      onSelectedChange
+    } = this.props;
+
+    onSelectedChange({ id: tmdbId, value, shiftKey });
+  }
+
   //
   // Render
 
@@ -71,7 +81,8 @@ class AddListMoviePoster extends Component {
       posterHeight,
       showTitle,
       isExistingMovie,
-      isExclusionMovie
+      isExclusionMovie,
+      isSelected
     } = this.props;
 
     const {
@@ -91,11 +102,14 @@ class AddListMoviePoster extends Component {
       <div className={styles.content}>
         <div className={styles.posterContainer}>
           {
-            isExclusionMovie &&
-              <div
-                className={styles.excluded}
-                title="Exluded"
+            <div className={styles.editorSelect}>
+              <CheckInput
+                className={styles.checkInput}
+                name={tmdbId.toString()}
+                value={isSelected}
+                onChange={this.onChange}
               />
+            </div>
           }
 
           <Label className={styles.controls}>
@@ -107,6 +121,14 @@ class AddListMoviePoster extends Component {
               isDisabled={isExclusionMovie}
             />
           </Label>
+
+          {
+            isExclusionMovie &&
+              <div
+                className={styles.excluded}
+                title="Exluded"
+              />
+          }
 
           <Link
             className={styles.link}
@@ -179,7 +201,9 @@ AddListMoviePoster.propTypes = {
   shortDateFormat: PropTypes.string.isRequired,
   timeFormat: PropTypes.string.isRequired,
   isExistingMovie: PropTypes.bool.isRequired,
-  isExclusionMovie: PropTypes.bool.isRequired
+  isExclusionMovie: PropTypes.bool.isRequired,
+  isSelected: PropTypes.bool,
+  onSelectedChange: PropTypes.func.isRequired
 };
 
 AddListMoviePoster.defaultProps = {
