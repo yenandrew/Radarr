@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Grid, WindowScroller } from 'react-virtualized';
+import { WindowScroller } from 'react-virtualized';
+import { FixedSizeGrid as Grid } from 'react-window';
 import getIndexOfFirstCharacter from 'Utilities/Array/getIndexOfFirstCharacter';
 import hasDifferentItemsOrOrder from 'Utilities/Object/hasDifferentItemsOrOrder';
 import dimensions from 'Styles/Variables/dimensions';
@@ -113,7 +114,7 @@ class AddListMoviePosters extends Component {
             prevState.rowHeight !== rowHeight ||
             hasDifferentItemsOrOrder(prevProps.items, items, 'tmdbId'))) {
       // recomputeGridSize also forces Grid to discard its cache of rendered cells
-      this._grid.recomputeGridSize();
+      // this._grid.recomputeGridSize();
     }
 
     if (jumpToCharacter != null && jumpToCharacter !== prevProps.jumpToCharacter) {
@@ -122,12 +123,16 @@ class AddListMoviePosters extends Component {
       if (this._grid && index != null) {
         const row = Math.floor(index / columnCount);
 
-        this._grid.scrollToCell({
+        this._grid.scrollToItem({
           rowIndex: row,
           columnIndex: 0
         });
       }
     }
+  }
+
+  onScroll = ({ scrollTop }) => {
+    this._grid.scrollTo({ scrollTop });
   }
 
   //
@@ -160,7 +165,7 @@ class AddListMoviePosters extends Component {
     });
   }
 
-  cellRenderer = ({ key, rowIndex, columnIndex, style }) => {
+  cellRenderer = ({ rowIndex, columnIndex, style }) => {
     const {
       items,
       sortKey,
@@ -192,11 +197,9 @@ class AddListMoviePosters extends Component {
     return (
       <div
         className={styles.container}
-        key={key}
         style={style}
       >
         <AddListMovieItemConnector
-          key={movie.tmdbId}
           component={AddListMoviePosterConnector}
           sortKey={sortKey}
           posterWidth={posterWidth}
@@ -247,8 +250,9 @@ class AddListMoviePosters extends Component {
       >
         <WindowScroller
           scrollElement={isSmallScreen ? undefined : scroller}
+          onScroll={this.onScroll}
         >
-          {({ height, registerChild, onChildScroll, scrollTop }) => {
+          {({ height, registerChild, onChildScroll }) => {
             if (!height) {
               return <div />;
             }
@@ -258,7 +262,6 @@ class AddListMoviePosters extends Component {
                 <Grid
                   ref={this.setGridRef}
                   className={styles.grid}
-                  autoHeight={true}
                   height={height}
                   columnCount={columnCount}
                   columnWidth={columnWidth}
@@ -266,13 +269,12 @@ class AddListMoviePosters extends Component {
                   rowHeight={rowHeight}
                   width={width}
                   onScroll={onChildScroll}
-                  scrollTop={scrollTop}
                   overscanRowCount={2}
-                  cellRenderer={this.cellRenderer}
                   selectedState={selectedState}
-                  scrollToAlignment={'start'}
-                  isScrollingOptOut={true}
-                />
+                  style={{ height: '100% !important' }}
+                >
+                  {this.cellRenderer}
+                </Grid>
               </div>
             );
           }
