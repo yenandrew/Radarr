@@ -23,24 +23,38 @@ class MoreInfo extends Component {
           </DescriptionListItemDescription>
 
           <DescriptionListItemTitle>
-            {translate('Discord')}
-          </DescriptionListItemTitle>
-          <DescriptionListItemDescription>
-            <Link to="https://radarr.video/discord">radarr.video/discord</Link>
-          </DescriptionListItemDescription>
-
-          <DescriptionListItemTitle>
             {translate('Wiki')}
           </DescriptionListItemTitle>
           <DescriptionListItemDescription>
-            <Link to="https://wiki.servarr.com/Radarr">wiki.servarr.com/Radarr</Link>
+            <Link to="https://wiki.servarr.com/Radarr">{translate('Wiki')}</Link>
+          </DescriptionListItemDescription>
+
+          <DescriptionListItemTitle>
+            {translate('Reddit')}
+          </DescriptionListItemTitle>
+          <DescriptionListItemDescription>
+            <Link to="https://www.reddit.com/r/Radarr/">/r/Radarr</Link>
+          </DescriptionListItemDescription>
+
+          <DescriptionListItemTitle>
+            {translate('Discord')}
+          </DescriptionListItemTitle>
+          <DescriptionListItemDescription>
+            <Link to="https://radarr.video/discord9">radarr.video/discord</Link>
           </DescriptionListItemDescription>
 
           <DescriptionListItemTitle>
             {translate('Donations')}
           </DescriptionListItemTitle>
           <DescriptionListItemDescription>
-            <Link to="https://opencollective.com/radarr">opencollective.com/radarr</Link>
+            <Link to="https://opencollective.com/radarr">{translate('DonateToRadarr')}</Link>
+          </DescriptionListItemDescription>
+
+          <DescriptionListItemTitle>
+            {translate('DonationsSonarr')}
+          </DescriptionListItemTitle>
+          <DescriptionListItemDescription>
+            <Link to="https://sonarr.tv/donate">{translate('DonateToSonarr')}</Link>
           </DescriptionListItemDescription>
 
           <DescriptionListItemTitle>
